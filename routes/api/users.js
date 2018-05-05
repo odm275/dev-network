@@ -23,40 +23,49 @@ router.get("/test", (req, res) => res.json({ msg: "Users Works" }));
 // @acess Public
 router.post("/register", async (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
-  //Check validation
+  // Check Validation
   if (!isValid) {
     return res.status(400).json(errors);
   }
 
-  const findUser = await User.findOne({ email: req.body.email });
-  if (findUser) {
+  const { name, email, password } = req.body;
+  const existingUser = await User.findOne({ email });
+
+  if (existingUser) {
     errors.email = "Email already exists";
     return res.status(400).json(errors);
   }
-  const avatar = gravatar.url(req.body.email, {
-    s: "200", // Size,
-    r: "pg", // Rating,
-    d: "mm"
+
+  const avatar = gravatar.url(email, {
+    s: "200", // Size
+    r: "pg", // Rating
+    d: "mm" // Default
   });
 
-  const newUser = new User({
-    name: req.body.name,
-    email: req.body.email,
+  const user = new User({
+    name,
+    email,
     avatar,
-    password: req.body.password
+    password
   });
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(newUser.password, salt, async (error, hash) => {
-      try {
-        if (err) throw err;
-        newUser.password = hash;
-        const user = await newUser.save();
-        console.log("user registered succesfully");
-      } catch (error) {
-        console.log(error);
-      }
-    });
-  });
+
+  try {
+    // generate a salt
+    const salt = await bcrypt.genSalt(10);
+
+    // hash the password along with our new salt
+    const hash = await bcrypt.hash(user.password, salt);
+
+    // override the cleartext password with the hashed one
+    user.password = hash;
+
+    // save the new user
+    const newUser = await user.save();
+
+    return res.json(newUser);
+  } catch (error) {
+    throw error;
+  }
 });
 // @route GET api/users/login
 // @desc login user / Returning JWToken
