@@ -177,8 +177,6 @@ router.post(
       description: req.body.description
     };
     //  Add to exp array
-    console.log(profile.experience.unshift(newExp));
-
     profile.experience.unshift(newExp);
     await profile.save();
     res.json(profile);

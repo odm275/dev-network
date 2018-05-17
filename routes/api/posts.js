@@ -69,16 +69,20 @@ router.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const profile = await Profile.findOne({ user: req.user.id });
-    const post = await Post.findById(req.params.id);
-    //Check post Owner
-    if (post.user.toString() !== req.user.id) {
-      return res.status(401).json({ notauthorized: "User not authorized" });
-    }
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+      const post = await Post.findById(req.params.id);
+      //Check post Owner
+      if (post.user.toString() !== req.user.id) {
+        return res.status(401).json({ notauthorized: "User not authorized" });
+      }
 
-    //Delete
-    await post.remove();
-    res.json({ success: true });
+      //Delete
+      post.remove();
+      res.json({ success: true });
+    } catch (error) {
+      res.status(404).json({ postnotfound: "No post found" });
+    }
   }
 );
 

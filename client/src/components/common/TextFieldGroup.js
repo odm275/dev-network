@@ -1,6 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import PropTypes from "prop-types";
+
 const TextFieldGroup = ({
   name,
   placeholder,
@@ -30,12 +31,13 @@ const TextFieldGroup = ({
     </div>
   );
 };
+
 TextFieldGroup.propTypes = {
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
   info: PropTypes.string,
-  errpr: PropTypes.string,
+  error: PropTypes.string,
   type: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.string

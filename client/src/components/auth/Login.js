@@ -7,7 +7,7 @@ class Login extends Component {
   constructor() {
     super();
     this.state = {
-      name: "",
+      email: "",
       password: "",
       errors: {}
     };
@@ -34,7 +34,6 @@ class Login extends Component {
     this.props.loginUser(userData);
   }
   render() {
-    console.log(this.state.errors);
     const { errors } = this.state;
     return (
       <div className="login">
