@@ -78,9 +78,9 @@ router.post(
 
     const profile = await Profile.findOne({ user: req.user.id });
 
+    // If there's no profile, then create one.
+    //  Check if handle exists. We want unique handles.
     if (!profile) {
-      // If there's no profile, then create one.
-      //  Check if handle exists. We want unique handles.
       const handle = await Profile.findOne({ handle: profileFields.handle });
       if (handle) {
         errors.handle = "That handle already exists";
@@ -89,6 +89,7 @@ router.post(
       const newProfile = await new Profile(profileFields).save();
       res.json(newProfile);
     }
+
     const updatedProfile = await Profile.findOneAndUpdate(
       { user: req.user.id },
       { $set: profileFields },
@@ -123,7 +124,7 @@ router.get("/all", async (req, res) => {
 
 router.get("/handle/:handle", async (req, res) => {
   let errors = {};
-  console.log(req.body);
+
   const profile = await Profile.findOne({ handle: req.params.handle }).populate(
     "user",
     ["name", "avatar"]
@@ -197,7 +198,6 @@ router.post(
     if (!isValid) {
       return res.status(400).json(errors);
     }
-    console.log(req.body.field);
 
     const newEdu = {
       school: req.body.school,

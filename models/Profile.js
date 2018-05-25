@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// Create Schema
 const ProfileSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
@@ -19,6 +20,10 @@ const ProfileSchema = new Schema({
   },
   location: {
     type: String
+  },
+  status: {
+    type: String,
+    required: true
   },
   skills: {
     type: [String],
@@ -70,7 +75,8 @@ const ProfileSchema = new Schema({
         required: true
       },
       field: {
-        type: String
+        type: String,
+        required: true
       },
       from: {
         type: Date,

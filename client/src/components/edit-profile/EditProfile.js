@@ -89,7 +89,7 @@ class EditProfile extends Component {
   }
   onSubmit(e) {
     e.preventDefault();
-
+    console.log(this.state.status);
     const profileData = {
       handle: this.state.handle,
       company: this.state.company,
@@ -283,7 +283,7 @@ class EditProfile extends Component {
 }
 
 EditProfile.propTypes = {
-  createProfie: PropTypes.func.isRequired,
+  createProfile: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
